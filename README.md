@@ -7,143 +7,116 @@
 [![Twitter](https://img.shields.io/twitter/follow/linera_io)](https://x.com/linera_io)
 [![Discord](https://img.shields.io/discord/984941796272521226)](https://discord.com/invite/linera)
 
-<!-- [![Build Status for Kubernetes](https://github.com/linera-io/linera-protocol/actions/workflows/kubernetes.yml/badge.svg)](https://github.com/linera-io/linera-protocol/actions/workflows/kubernetes.yml) -->
+---
 
-[Linera](https://linera.io) is a decentralized blockchain infrastructure designed for highly scalable,
-secure, low-latency Web3 applications.
+[**Linera**](https://linera.io) is a decentralized blockchain infrastructure designed for highly scalable, secure, and low-latency Web3 applications.
+It enables developers to build next-generation decentralized applications (dApps) with **microchains**, achieving parallel execution and instant finality.
 
-## Documentation
+---
 
-Visit our [developer page](https://linera.dev) and read our
-[whitepaper](https://linera.io/whitepaper) to learn more about the Linera protocol.
+## 📖 Documentation
 
-## Repository Structure
+* [Developer Portal](https://linera.dev)
+* [Whitepaper](https://linera.io/whitepaper)
 
-The main crates and directories of this repository can be summarized as follows: (listed
-from low to high levels in the dependency graph)
+---
 
-* [`linera-base`](https://linera-io.github.io/linera-protocol/linera_base/index.html) Base
-  definitions, including cryptography.
+## 📂 Repository Structure
 
-* [`linera-version`](https://linera-io.github.io/linera-protocol/linera_version/index.html)
-  A library to manage version info in binaries and services.
+The main crates and directories are organized from low to high levels in the dependency graph:
 
-* [`linera-views`](https://linera-io.github.io/linera-protocol/linera_views/index.html) A
-  library mapping complex data structures onto a key-value store. The corresponding
-  procedural macros are implemented in `linera-views-derive`.
+* [`linera-base`](https://linera-io.github.io/linera-protocol/linera_base/index.html) – Base definitions, including cryptography.
+* [`linera-version`](https://linera-io.github.io/linera-protocol/linera_version/index.html) – Versioning utilities for binaries and services.
+* [`linera-views`](https://linera-io.github.io/linera-protocol/linera_views/index.html) – Mapping complex data structures onto key-value stores.
+* [`linera-execution`](https://linera-io.github.io/linera-protocol/linera_execution/index.html) – Runtime and execution logic for Linera applications.
+* [`linera-chain`](https://linera-io.github.io/linera-protocol/linera_chain/index.html) – Chains of blocks, certificates, and cross-chain messaging.
+* [`linera-storage`](https://linera-io.github.io/linera-protocol/linera_storage/index.html) – Storage abstractions built on top of `linera-chain`.
+* [`linera-core`](https://linera-io.github.io/linera-protocol/linera_core/index.html) – Core protocol (client/server logic, node synchronization).
+* [`linera-rpc`](https://linera-io.github.io/linera-protocol/linera_rpc/index.html) – RPC message types and schemas.
+* [`linera-client`](https://linera-io.github.io/linera-protocol/linera_client/index.html) – Libraries and CLI tools for clients.
+* [`linera-service`](https://linera-io.github.io/linera-protocol/linera_service/index.html) – Executables: CLI wallets, validator frontends, and servers.
+* [`linera-sdk`](https://linera-io.github.io/linera-protocol/linera_sdk/index.html) – SDK for developing Linera apps in Rust for Wasm.
+* [`examples`](./examples) – Example Linera applications in Rust.
 
-* [`linera-execution`](https://linera-io.github.io/linera-protocol/linera_execution/index.html)
-  Persistent data and the corresponding logic for runtime and execution of Linera
-  applications.
+---
 
-* [`linera-chain`](https://linera-io.github.io/linera-protocol/linera_chain/index.html)
-  Persistent data and the corresponding logic for chains of blocks, certificates, and
-  cross-chain messaging.
+## ⚙️ Prerequisites
 
-* [`linera-storage`](https://linera-io.github.io/linera-protocol/linera_storage/index.html)
-  Defines the storage abstractions for the protocol on top of `linera-chain`.
+See [`INSTALL.md`](./INSTALL.md) for software requirements.
+Ensure you have **Rust**, **Cargo**, and **Docker** installed.
 
-* [`linera-core`](https://linera-io.github.io/linera-protocol/linera_core/index.html) The
-  core Linera protocol, including client and server logic, node synchronization, etc.
+---
 
-* [`linera-rpc`](https://linera-io.github.io/linera-protocol/linera_rpc/index.html)
-  Defines the data-type for RPC messages (currently all client &#x2194; proxy &#x2194;
-  chain &#x2194; chain interactions), and track the corresponding data schemas.
+## 🚀 Quickstart (Linera CLI)
 
-* [`linera-client`](https://linera-io.github.io/linera-protocol/linera_client/index.html)
-  Library for writing Linera clients.  Used for the command-line
-  client and the node service in `linera-service`, as well as the Web
-  client in [`linera-web`](https://github.com/linera-io/linera-web/).
-
-* [`linera-service`](https://linera-io.github.io/linera-protocol/linera_service/index.html)
-  Executable for clients (aka CLI wallets), proxy (aka validator frontend) and servers.
-
-* [`linera-sdk`](https://linera-io.github.io/linera-protocol/linera_sdk/index.html) The
-  library to develop Linera applications written in Rust for the Wasm virtual machine. The
-  corresponding procedural macros are implemented in `linera-sdk-derive`.
-
-* [`examples`](./examples) Examples of Linera applications written in Rust.
-
-## Prerequisites
-
-See [`INSTALL.md`](./INSTALL.md) for software requirements to develop in this repo.
-
-## Quickstart with the Linera CLI tool
-
-The following commands set up a local test network and run some transfers between the
-microchains owned by a single wallet.
+The following commands set up a **local test network** and run transfers between microchains owned by a single wallet:
 
 ```bash
-# Make sure to compile the Linera binaries and add them in the $PATH.
-# cargo build -p linera-storage-service -p linera-service --bins
+# Build binaries
+cargo build -p linera-storage-service -p linera-service --bins
 export PATH="$PWD/target/debug:$PATH"
 
-# Import the optional helper function `linera_spawn`.
+# Import helper
 source /dev/stdin <<<"$(linera net helper 2>/dev/null)"
 
-# Run a local test network with the default parameters and a number of microchains
-# owned by the default wallet. This also defines `LINERA_TMP_DIR`.
-linera_spawn \
-linera net up --with-faucet --faucet-port 8080
+# Start local test network
+linera_spawn linera net up --with-faucet --faucet-port 8080
 
-# Remember the URL of the faucet.
+# Set faucet URL
 FAUCET_URL=http://localhost:8080
 
-# If you're using a testnet, start here and run this instead:
-#   LINERA_TMP_DIR=$(mktemp -d)
-#   FAUCET_URL=https://faucet.testnet-XXX.linera.net  # for some value XXX
-
-# Set the path of the future wallet.
+# Wallet setup
 export LINERA_WALLET="$LINERA_TMP_DIR/wallet.json"
 export LINERA_KEYSTORE="$LINERA_TMP_DIR/keystore.json"
 export LINERA_STORAGE="rocksdb:$LINERA_TMP_DIR/client.db"
 
-# Initialize a new user wallet.
+# Initialize wallet
 linera wallet init --faucet $FAUCET_URL
 
-# Request chains.
+# Request two chains
 INFO1=($(linera wallet request-chain --faucet $FAUCET_URL))
 INFO2=($(linera wallet request-chain --faucet $FAUCET_URL))
-CHAIN1="${INFO1[0]}"
-ACCOUNT1="${INFO1[1]}"
-CHAIN2="${INFO2[0]}"
-ACCOUNT2="${INFO2[1]}"
+CHAIN1="${INFO1[0]}" ; ACCOUNT1="${INFO1[1]}"
+CHAIN2="${INFO2[0]}" ; ACCOUNT2="${INFO2[1]}"
 
-# Show the different chains tracked by the wallet.
+# Show chains
 linera wallet show
 
-# Query the chain balance of some of the chains.
-linera query-balance "$CHAIN1"
-linera query-balance "$CHAIN2"
-
-# Transfer 10 units then 5 back.
+# Transfer and query balances
 linera transfer 10 --from "$CHAIN1" --to "$CHAIN2"
 linera transfer 5 --from "$CHAIN2" --to "$CHAIN1"
+linera query-balance "$CHAIN1" "$CHAIN2"
 
-# Query balances again.
-linera query-balance "$CHAIN1"
-linera query-balance "$CHAIN2"
-
-# Now let's fund the user balances.
+# Fund user balances
 linera transfer 5 --from "$CHAIN1" --to "$CHAIN1:$ACCOUNT1"
 linera transfer 2 --from "$CHAIN1:$ACCOUNT1" --to "$CHAIN2:$ACCOUNT2"
 
-# Query user balances again.
 linera query-balance "$CHAIN1:$ACCOUNT1"
 linera query-balance "$CHAIN2:$ACCOUNT2"
 ```
 
-More complex examples may be found in our [developer manual](https://linera.dev) as well
-as the [example applications](./examples) in this repository.
+More complex usage examples can be found in our [Developer Manual](https://linera.dev) and [`examples`](./examples).
 
-## Contributing
+---
 
-We welcome contributions from the community! If you'd like to contribute to the Linera protocol:
+## 🤝 Contributing
+
+We welcome contributions from the community!
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to your branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-For detailed guidelines, see our [contribution guide](./CONTRIBUTING.md).
+See our [Contribution Guide](./CONTRIBUTING.md) for details.
+
+---
+
+## 🌍 Community
+
+* [Twitter / X](https://x.com/linera_io)
+* [Discord](https://discord.com/invite/linera)
+* [Governance Forum](https://governance.linera.io)
+
+---
